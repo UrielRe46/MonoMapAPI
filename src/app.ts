@@ -1,11 +1,15 @@
 import express from "express";
+import { envs } from "./config/envs.plugin";
+import { MongoDatabase } from "./data/init";
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hola mundo");
-});
+(async () =>
+    MongoDatabase.connect({
+        dbName: "MonoMapApi",
+        mongoUrl: envs.MONGO_URL ?? "",
+    }))();
 
-app.listen(3000, () => {
-  console.log("Servidor esta corriendo");
+app.listen(envs.PORT, () => {
+    console.log("Servidor esta corriendo");
 });
