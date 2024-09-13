@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const monocaseSchema = new mongoose.Schema({
-    title: {
+    lugar: {
         type: String,
         required: true,
     },

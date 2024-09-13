@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import { MonoCaseModel } from "../../../data/models/monocase.model";
 
 export class MonoCaseController {
-    //Obtener todos los casos - funciona
+    
+    //Obtener todos los casos - Funciona
     public getMonoCases = async (req: Request, res: Response) => {
         try {
             const monocases = await MonoCaseModel.find();
@@ -12,12 +13,12 @@ export class MonoCaseController {
         }
     };
 
-    //Crear un nuevo caso - funciona
+    //Crear un nuevo caso - Funciona
     public createMonocase = async (req: Request, res: Response) => {
         try {
-            const { title, lat, lng, name, genre, age } = req.body;
+            const { lugar, lat, lng, name, genre, age } = req.body;
             const newMonocase = await MonoCaseModel.create({
-                title,
+                lugar,
                 lat,
                 lng,
                 name,
@@ -30,7 +31,7 @@ export class MonoCaseController {
         }
     };
 
-    //Obtener caso por Id - funciona
+    //Obtener caso por Id - Funciona
     public getMonocaseById = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
@@ -43,16 +44,16 @@ export class MonoCaseController {
         }
     };
 
-    //Actualizar por Id - funciona
+    //Actualizar por Id - Funciona
     public updateMonocase = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
-            const { title, lat, lng, name, genre, age } = req.body;
+            const { lugar, lat, lng, name, genre, age } = req.body;
 
             const updatedMonocase = await MonoCaseModel.findByIdAndUpdate(
                 id,
                 {
-                    title,
+                    lugar,
                     lat,
                     lng,
                     name,
@@ -72,7 +73,7 @@ export class MonoCaseController {
         }
     };
     
-    //Eliminar un caso por su id
+    //Eliminar un caso por su id - Funciona
     public deleteMonocase = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
@@ -82,6 +83,28 @@ export class MonoCaseController {
             return res.json({
                 message: "Ocurrio un error al eliminar el caso de Viruela de Mono",
             });
+        }
+    };
+
+    // Obtener casos registrados en la última semana - Funciona
+    public getMonoCasesLastWeek = async (req: Request, res: Response) => {
+        try {
+            // Calcula la fecha actual y la fecha de hace una semana
+            const currentDate = new Date();
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(currentDate.getDate() - 7);
+
+            // Busca los casos en la última semana
+            const monocases = await MonoCaseModel.find({
+                creationDate: {
+                    $gte: oneWeekAgo,
+                    $lte: currentDate
+                }
+            });
+
+            return res.json(monocases);
+        } catch (error) {
+            return res.status(500).json({ message: "Error obteniendo los casos registrados en la ultima semana" });
         }
     };
 }
