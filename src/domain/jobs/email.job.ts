@@ -29,7 +29,7 @@ export const emailJob = () => {
                         );
                         await emailService.sendEmail({
                             to: "uri29644@gmail.com",
-                            subject: `Nuevo caso de Viruela de Mono`,
+                            subject: `Nuevo caso de Viruela de Mono en México`,
                             htmlBody: htmlBody,
                         });
                         console.log(
